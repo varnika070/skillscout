@@ -89,6 +89,7 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 3. WHEN learners select advanced topics, THE System SHALL surface critical missing prerequisites
 4. THE Platform SHALL explain the relationship between foundational and advanced concepts
 5. THE Prototype SHALL demonstrate skill graph reasoning with a curated set of technology domains
+6. THE System SHALL use Topological Sorting to ensure all paths are Directed Acyclic Graphs (DAGs), preventing circular prerequisite loops
 
 ### Requirement 6: Prerequisite Gap Detection
 
@@ -119,6 +120,7 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 7. THE AI_Reasoner SHALL produce responses in under 3 seconds for 95% of requests
 8. THE Platform SHALL achieve 95% or higher accuracy in dependency identification
 9. WHEN learners set unrealistic goals, THE System SHALL provide adjusted timeline recommendations with clear reasoning
+10. THE System SHALL support Roman-script Hindi (Hinglish) input to accommodate regional learners' natural typing habits
 
 ### Requirement 8: Community Learning Integration (MVP)
 
@@ -138,11 +140,12 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 
 #### Acceptance Criteria
 
-1. THE Platform SHALL demonstrate support for Hindi and English in core interactions
-2. THE System SHALL be designed to work on mobile devices common in Tier-2/Tier-3 areas
-3. THE Platform SHALL accommodate learners with varying levels of English proficiency in the prototype
-4. THE System SHALL demonstrate basic accessibility considerations for diverse learners
-5. THE Prototype SHALL show potential for broader language and accessibility support
+1. THE Platform SHALL integrate Bhashini Udyat API for Hindi and English support in core interactions
+2. THE System SHALL implement contextual transliteration to ensure technical terms (like 'React' or 'API') are phonetically preserved in Hindi rather than literally translated
+3. THE System SHALL be designed to work on mobile devices common in Tier-2/Tier-3 areas
+4. THE Platform SHALL accommodate learners with varying levels of English proficiency in the prototype
+5. THE System SHALL demonstrate basic accessibility considerations for diverse learners
+6. THE Prototype SHALL show potential for broader language and accessibility support
 
 ### Requirement 10: Progress Tracking and Feedback Integration
 
@@ -201,16 +204,17 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 
 ### Requirement 14: Platform Performance (Prototype Environment)
 
-**User Story:** As a platform user, I want responsive service, so that my learning experience demonstrates the platform's potential effectively.
+**User Story:** As a platform user, I want responsive service with P90 Latency < 2.5s, so that my learning experience demonstrates the platform's potential effectively.
 
 #### Acceptance Criteria
 
 1. THE System SHALL respond to learning path generation requests in under 3 seconds for 95% of requests
-2. THE Platform SHALL be designed to support multiple concurrent users in a prototype environment
-3. THE AI_Reasoner SHALL maintain recommendation quality under typical demo conditions
-4. THE System SHALL demonstrate reliability during presentation and testing scenarios
-5. THE Platform SHALL be designed with scalability considerations for future development
-6. THE Platform SHALL support at least 50 concurrent users during demonstration scenarios
+2. THE Platform SHALL achieve P90 Latency < 2.5s through Redis Semantic Caching for frequent queries
+3. THE Platform SHALL be designed to support multiple concurrent users in a prototype environment
+4. THE AI_Reasoner SHALL maintain recommendation quality under typical demo conditions
+5. THE System SHALL demonstrate reliability during presentation and testing scenarios
+6. THE Platform SHALL be designed with scalability considerations for future development
+7. THE Platform SHALL support at least 50 concurrent users during demonstration scenarios
 
 ### Requirement 15: AI Platform Integration and Intelligence
 
@@ -219,11 +223,12 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 #### Acceptance Criteria
 
 1. THE System SHALL use a production-grade LLM API (OpenAI GPT-4, Anthropic Claude, or Krutrim AI) for learning path generation
-2. THE AI_Reasoner SHALL use the same LLM for generating explanations in both Hindi and English
-3. THE Platform SHALL implement response caching using Redis to optimize API costs and latency
-4. WHEN the AI service is unavailable, THE System SHALL fall back to rule-based path generation with cached responses
-5. THE Platform SHALL implement API rate limiting (100 requests per hour per user) to prevent cost overruns
-6. THE System SHALL log all AI interactions for quality monitoring and improvement
+2. THE AI_Reasoner SHALL integrate Bhashini Udyat API for generating explanations in both Hindi and English
+3. THE System SHALL implement contextual transliteration to preserve technical terminology (e.g., 'React', 'API', 'JavaScript') phonetically in Hindi rather than literal translation
+4. THE Platform SHALL implement response caching using Redis to optimize API costs and latency
+5. WHEN the AI service is unavailable, THE System SHALL fall back to rule-based path generation with cached responses
+6. THE Platform SHALL implement API rate limiting (100 requests per hour per user) to prevent cost overruns
+7. THE System SHALL log all AI interactions for quality monitoring and improvement
 
 ## MVP Scope & Success Metrics
 

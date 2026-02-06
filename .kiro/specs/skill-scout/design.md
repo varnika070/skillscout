@@ -36,7 +36,7 @@ SkillScout is an AI-powered learning guidance platform that addresses the critic
 - **LLM Integration**: OpenAI GPT-4 API for path generation and explanations
 - **Graph Database**: NetworkX (Python) for skill dependency analysis
 - **Reasoning Engine**: Custom Python logic for skill analysis and path generation
-- **Multilingual Engine**: **Bhashini Udyat APIs** for high-fidelity translation and transliteration (Indic-to-Indic and English-to-Indic).
+- **Multilingual Engine**: Bhashini Udyat APIs for high-fidelity translation and transliteration
 - **Caching**: Redis for API response caching
 - **Pattern Recognition**: Simple ML models for community learning pattern analysis
 
@@ -48,7 +48,7 @@ SkillScout is an AI-powered learning guidance platform that addresses the critic
 ### Infrastructure (Hackathon-Friendly)
 - **Deployment**: Vercel/Netlify (frontend) + Railway/Render (backend)
 - **Database Hosting**: Supabase, PlanetScale, or MongoDB Atlas free tiers
-- **AI Services**: OpenAI API or Hugging Face Inference API
+- **AI Services**: OpenAI GPT-4 API and Bhashini Udyat APIs
 - **Monitoring**: Simple logging with Sentry for error tracking
 - **Version Control**: GitHub with CI/CD via GitHub Actions
 
@@ -79,7 +79,7 @@ graph TD
         subgraph "Core Logic"
             PathGen[Learning Path Generator]
             GraphEngine[NetworkX Graph Engine]
-            AIReasoner[AI Reasoning Engine<br/>GPT-4 + Google Translate]
+            AIReasoner[AI Reasoning Engine<br/>GPT-4 + Bhashini Udyat APIs]
             ResourceEngine[Resource Recommendation Engine<br/>YouTube API v3]
             CommunityEngine[Community Intelligence Engine]
         end
@@ -218,6 +218,7 @@ Generates clear, contextual explanations for AI recommendations.
 - Converts AI reasoning into human-readable explanations
 - Adapts language complexity based on learner background
 - Supports Hindi and English with culturally relevant examples
+- Leverages Bhashini to handle technical terminology through contextual transliteration (e.g., ensuring English technical terms are phonetically accurate in Hindi)
 - Explains "why" each learning step matters for career goals
 
 ### 6. Resource Recommendation Engine
