@@ -64,54 +64,56 @@ SkillScout is an AI-powered learning guidance platform that addresses the critic
 
 ### High-Level System Architecture
 
+This architecture uses a unified FastAPI backend to minimize network hops and latency, which is critical for meeting the 3-second response target specified in the requirements.
+
 ```mermaid
-graph TB
+graph TD
     subgraph "Frontend Layer"
-        UI[Web Interface]
-        Mobile[Mobile App]
+        UI[Web Interface - React/Next.js]
+        Mobile[Mobile PWA]
     end
     
-    subgraph "API Gateway"
-        Gateway[API Gateway]
-    end
-    
-    subgraph "Core Services"
-        PathGen[Learning Path Generator]
-        SkillAnalyzer[Skill Dependency Analyzer]
-        Explainer[AI Explanation Engine]
-        Community[Community Intelligence]
-    end
-    
-    subgraph "AI/ML Layer"
-        Reasoner[AI Reasoner]
-        NLP[Natural Language Processing]
-        RecEngine[Recommendation Engine]
+    subgraph "Unified Backend (Python)"
+        FastAPI[FastAPI Server]
+        
+        subgraph "Core Logic"
+            PathGen[Learning Path Generator]
+            GraphEngine[NetworkX Graph Engine]
+            AIReasoner[AI Reasoning Engine<br/>GPT-4 + Google Translate]
+            ResourceEngine[Resource Recommendation Engine<br/>YouTube API v3]
+            CommunityEngine[Community Intelligence Engine]
+        end
     end
     
     subgraph "Data Layer"
-        SkillGraph[(Skill Graph DB)]
-        UserData[(User Progress DB)]
-        CommunityData[(Community Signals DB)]
-        Resources[(Resource Metadata)]
+        PostgreSQL[(PostgreSQL<br/>Users, Skills, Progress)]
+        Redis[(Redis Cache<br/>API Responses, Paths)]
     end
     
-    UI --> Gateway
-    Mobile --> Gateway
-    Gateway --> PathGen
-    Gateway --> SkillAnalyzer
-    Gateway --> Explainer
-    Gateway --> Community
+    UI --> FastAPI
+    Mobile --> FastAPI
     
-    PathGen --> Reasoner
-    SkillAnalyzer --> Reasoner
-    Explainer --> NLP
-    Community --> RecEngine
+    FastAPI --> PathGen
+    FastAPI --> ResourceEngine
+    FastAPI --> CommunityEngine
     
-    Reasoner --> SkillGraph
-    PathGen --> UserData
-    Community --> CommunityData
-    PathGen --> Resources
+    PathGen --> GraphEngine
+    PathGen --> AIReasoner
+    
+    GraphEngine --> PostgreSQL
+    AIReasoner --> Redis
+    ResourceEngine --> Redis
+    
+    PathGen --> PostgreSQL
+    CommunityEngine --> PostgreSQL
 ```
+
+**Key Architectural Decisions**:
+
+- **Unified Backend**: FastAPI serves as the single entry point, eliminating gateway overhead and reducing latency
+- **Topological Sorting**: The NetworkX Graph Engine uses topological sorting algorithms to ensure learning paths are logically ordered with prerequisites appearing before dependent skills
+- **Intelligent Caching**: Redis caches GPT-4 responses and YouTube API results to optimize costs and response times
+- **Direct Integration**: All components run within the same Python process, enabling fast in-memory communication
 
 ### Component Interaction Flow
 
@@ -119,22 +121,43 @@ graph TB
 sequenceDiagram
     participant User
     participant UI
+    participant FastAPI
     participant PathGen as Path Generator
-    participant Reasoner as AI Reasoner
-    participant SkillGraph as Skill Graph
-    participant Explainer
+    participant GraphEngine as NetworkX Graph
+    participant AIReasoner as AI Reasoner (GPT-4)
+    participant PostgreSQL
+    participant Redis
     
     User->>UI: Input goals & current skills
-    UI->>PathGen: Generate learning path request
-    PathGen->>Reasoner: Analyze skill requirements
-    Reasoner->>SkillGraph: Query dependencies
-    SkillGraph-->>Reasoner: Return skill relationships
-    Reasoner-->>PathGen: Provide reasoning & gaps
-    PathGen->>Explainer: Generate explanations
-    Explainer-->>PathGen: Return explanations
-    PathGen-->>UI: Complete learning path
-    UI-->>User: Display path with explanations
+    UI->>FastAPI: POST /generate-path
+    FastAPI->>PathGen: Generate learning path request
+    
+    PathGen->>GraphEngine: Query skill dependencies
+    GraphEngine->>PostgreSQL: Fetch skill graph data
+    PostgreSQL-->>GraphEngine: Return skills & prerequisites
+    GraphEngine-->>PathGen: Topologically sorted skill sequence
+    
+    PathGen->>Redis: Check cached explanation
+    alt Cache Hit
+        Redis-->>PathGen: Return cached response
+    else Cache Miss
+        PathGen->>AIReasoner: Generate explanations (GPT-4)
+        AIReasoner-->>PathGen: Return explanations
+        PathGen->>Redis: Cache response
+    end
+    
+    PathGen->>PostgreSQL: Save learning path
+    PathGen-->>FastAPI: Complete learning path with explanations
+    FastAPI-->>UI: JSON response
+    UI-->>User: Display personalized path
 ```
+
+**Flow Highlights**:
+
+- **Cache-First Strategy**: Redis is checked before making expensive GPT-4 API calls
+- **Graph-Based Ordering**: NetworkX ensures prerequisite dependencies are respected through topological sorting
+- **Single Round-Trip**: Frontend makes one API call; backend orchestrates all internal operations
+- **Persistent Storage**: PostgreSQL stores user progress and skill graph for consistency
 
 ## Components and Interfaces
 
