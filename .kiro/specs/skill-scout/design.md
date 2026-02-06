@@ -27,25 +27,23 @@ SkillScout is an AI-powered learning guidance platform that addresses the critic
 - **UI Framework**: Tailwind CSS for rapid, accessible interface development
 
 ### Backend Layer
-- **API Gateway**: Node.js/Express or Python/FastAPI for RESTful APIs
+- **API Framework**: **FastAPI (Python)**. Consolidating the backend in Python allows for native integration with **NetworkX** for graph logic and **Bhashini's** Python SDKs, reducing architectural overhead.
 - **Modular Services**: Modular service-oriented backend for clear separation of concerns
 - **Authentication**: JWT-based auth with secure session management
 - **API Design**: GraphQL or REST for flexible data querying
 
 ### AI & Intelligence Layer
-- **LLM Integration**: OpenAI GPT or open-source alternatives (Llama, Mistral) for explanation generation
-- **Graph Database**: Neo4j or NetworkX for skill dependency graph management
+- **LLM Integration**: OpenAI GPT-4 API for path generation and explanations
+- **Graph Database**: NetworkX (Python) for skill dependency analysis
 - **Reasoning Engine**: Custom Python logic for skill analysis and path generation
-- **NLP Processing**: Language detection and translation for multilingual support
+- **Multilingual Engine**: **Bhashini Udyat APIs** for high-fidelity translation and transliteration (Indic-to-Indic and English-to-Indic).
+- **Caching**: Redis for API response caching
 - **Pattern Recognition**: Simple ML models for community learning pattern analysis
 
 ### Data Layer
-- **Skill Graph Database**: Neo4j (graph) or PostgreSQL with graph extensions
-- **User Data**: PostgreSQL or MongoDB for learner profiles and progress
-- **Community Signals**: Time-series database (InfluxDB) or document store for anonymized data
-- **Caching**: Redis for frequently accessed skill relationships and paths
+- **Database**: PostgreSQL for all data (profiles, skills, progress)
+- **Caching**: Redis for caching
 - **Resource Metadata**: JSON-based storage for learning resource information
-In the prototype, these may be simplified or consolidated into fewer data stores.
 
 ### Infrastructure (Hackathon-Friendly)
 - **Deployment**: Vercel/Netlify (frontend) + Railway/Render (backend)
@@ -198,6 +196,14 @@ Generates clear, contextual explanations for AI recommendations.
 - Adapts language complexity based on learner background
 - Supports Hindi and English with culturally relevant examples
 - Explains "why" each learning step matters for career goals
+
+### 6. Resource Recommendation Engine
+
+Integrates YouTube Data API v3 for video discovery. Filters by language (Hindi/English), views (>10k), likes (>90%), recency (<2 years). Returns 1 primary resource + 2-3 videos per skill. Caches popular queries in Redis.
+
+## Data Bootstrapping Strategy
+
+Initial skill graph: 50-100 manually curated skills for 5 career paths (Frontend, Backend, Data Science, DevOps, Mobile). Community data seeded with 20-30 synthetic learner journeys showing realistic timelines and common challenges (e.g., "87% found closures difficult").
 
 ## Data Models
 

@@ -100,6 +100,9 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 2. WHEN gaps are identified, THE System SHALL prioritize them by importance and learning efficiency
 3. THE Platform SHALL provide specific recommendations for addressing each gap
 4. WHEN learners complete prerequisites, THE System SHALL reassess their readiness for advanced topics
+5. WHEN learners set unrealistic goals (e.g., "become ML engineer in 1 week"), THE System SHALL detect timeline feasibility issues and suggest realistic alternatives
+6. THE Platform SHALL provide adjusted timelines based on industry-standard learning pace data
+7. WHEN prerequisite conflicts exist, THE System SHALL prioritize based on blocking impact and learning efficiency
 
 ### Requirement 7: AI-Powered Reasoning and Explanations
 
@@ -112,6 +115,10 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 3. THE AI_Reasoner SHALL adapt explanations to the learner's background and Learning_Context
 4. WHEN learners question recommendations, THE System SHALL provide detailed reasoning
 5. THE Platform SHALL use natural language that is accessible to non-technical learners
+6. THE System SHALL generate explanations with 80% or higher helpfulness rating from test users
+7. THE AI_Reasoner SHALL produce responses in under 3 seconds for 95% of requests
+8. THE Platform SHALL achieve 95% or higher accuracy in dependency identification
+9. WHEN learners set unrealistic goals, THE System SHALL provide adjusted timeline recommendations with clear reasoning
 
 ### Requirement 8: Community Learning Integration (MVP)
 
@@ -158,9 +165,15 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 
 1. THE System SHALL demonstrate resource recommendation capabilities for key skills
 2. THE Platform SHALL show how to explain resource selection and sequencing
-3. THE Prototype SHALL integrate with at least one popular learning platform for demonstration
+3. THE Prototype SHALL integrate YouTube Data API v3 for video tutorial discovery with the following filters:
+   - Language preference (Hindi or English)
+   - Minimum view count (>10,000 views)
+   - Like ratio (>90% positive)
+   - Recency filter (published within last 2 years)
+   - Video duration (prefer 15-45 minute tutorials)
 4. THE System SHALL provide basic guidance on resource prioritization and time allocation
 5. THE Platform SHALL demonstrate the concept of adaptive resource recommendations
+6. THE System SHALL provide 1 primary resource (official documentation or curated course) plus 2-3 supplementary video tutorials per skill
 
 ### Requirement 12: Goal Setting and Career Alignment (Demonstrative)
 
@@ -192,8 +205,73 @@ SkillScout is an AI-powered learning guidance platform designed to address the c
 
 #### Acceptance Criteria
 
-1. THE System SHALL aim to respond to learning path requests within reasonable time for demonstration purposes
+1. THE System SHALL respond to learning path generation requests in under 3 seconds for 95% of requests
 2. THE Platform SHALL be designed to support multiple concurrent users in a prototype environment
 3. THE AI_Reasoner SHALL maintain recommendation quality under typical demo conditions
 4. THE System SHALL demonstrate reliability during presentation and testing scenarios
 5. THE Platform SHALL be designed with scalability considerations for future development
+6. THE Platform SHALL support at least 50 concurrent users during demonstration scenarios
+
+### Requirement 15: AI Platform Integration and Intelligence
+
+**User Story:** As a platform, I want to leverage advanced AI for intelligent path generation and multilingual support, so that I can provide high-quality, India-centric learning guidance.
+
+#### Acceptance Criteria
+
+1. THE System SHALL use a production-grade LLM API (OpenAI GPT-4, Anthropic Claude, or Krutrim AI) for learning path generation
+2. THE AI_Reasoner SHALL use the same LLM for generating explanations in both Hindi and English
+3. THE Platform SHALL implement response caching using Redis to optimize API costs and latency
+4. WHEN the AI service is unavailable, THE System SHALL fall back to rule-based path generation with cached responses
+5. THE Platform SHALL implement API rate limiting (100 requests per hour per user) to prevent cost overruns
+6. THE System SHALL log all AI interactions for quality monitoring and improvement
+
+## MVP Scope & Success Metrics
+
+### Coverage Scope
+
+THE Platform SHALL initially cover:
+
+- **Skill Universe**: 50-100 curated skills across 5 primary career paths
+  - Frontend Development (HTML, CSS, JavaScript, React, Vue, TypeScript)
+  - Backend Development (Node.js, Python, Django, FastAPI, SQL, PostgreSQL)
+  - Data Science (Python, pandas, NumPy, Matplotlib, basic ML concepts)
+  - DevOps (Git, Linux, Docker, CI/CD fundamentals)
+  - Mobile Development (React Native, Flutter basics)
+
+### Performance Targets
+
+THE System SHALL meet these benchmarks:
+
+- API Response Time: <3 seconds for 95% of requests
+- Concurrent Users: Support 50+ simultaneous users
+- Dependency Accuracy: 95% or higher in prerequisite identification
+- Cache Hit Rate: 70% or higher for common learning paths
+
+### Quality Metrics
+
+THE Platform SHALL achieve:
+
+- Explanation Helpfulness: 80% positive rating from test users
+- Path Completion Rate: Track and optimize for learner progress
+- Language Quality: Natural, accessible language for non-technical learners
+- Community Data: Seeded with 20-30 realistic synthetic learner journeys
+
+### Demonstration Capabilities
+
+THE Prototype SHALL successfully demonstrate:
+
+- End-to-end learning path generation for at least 3 different career goals
+- Hindi and English language switching in core features
+- YouTube resource integration with quality filtering
+- Community learning insights (using synthetic data)
+- Prerequisite gap detection and explanation
+
+Why SkillScout Is Different
+
+Most platforms answer “What should I learn?” — SkillScout answers “Why now?”
+
+Most platforms optimize for content — SkillScout optimizes for learning order
+
+Most AI tools generate paths — SkillScout defends them with reasoning
+
+Most learners fail due to confusion — SkillScout reduces cognitive overload
